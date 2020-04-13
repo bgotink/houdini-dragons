@@ -122,7 +122,7 @@ class DndBox extends LitElement {
 
     return html`
       <section class="box box--with-title" aria-labelledby="title" style=${styleMap(style)}>
-        <h2 class="title" id="title">${this.title}</h2>
+        <h2 class="title" part="title" id="title">${this.title}</h2>
 
         <slot></slot>
       </section>

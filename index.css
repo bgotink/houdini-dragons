@@ -13,6 +13,10 @@ body {
   height: 580px;
 }
 
+.box::part(title) {
+  color: deepskyblue;
+}
+
 .traits dnd-box {
   --dnd-box-bottom: type1d;
   --dnd-box-top: type1d;
