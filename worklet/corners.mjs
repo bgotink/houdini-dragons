@@ -6,7 +6,6 @@ export function topLeft(fn) {
   return (ctx, geom) => {
     ctx.save();
 
-    ctx.resetTransform();
     fn(ctx, geom);
 
     ctx.restore();
@@ -21,7 +20,6 @@ export function topRight(fn) {
   return (ctx, geom) => {
     ctx.save();
 
-    ctx.resetTransform();
     ctx.translate(geom.width, 0);
     ctx.scale(-1, 1);
     
@@ -39,7 +37,6 @@ export function bottomLeft(fn) {
   return (ctx, geom) => {
     ctx.save();
 
-    ctx.resetTransform();
     ctx.translate(0, geom.height);
     ctx.scale(1, -1);
     
@@ -57,7 +54,6 @@ export function bottomRight(fn) {
   return (ctx, geom) => {
     ctx.save();
 
-    ctx.resetTransform();
     ctx.translate(geom.width, geom.height);
     ctx.scale(-1, -1);
     

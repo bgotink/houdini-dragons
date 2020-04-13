@@ -34,6 +34,11 @@ class Painter {
     const top = types[properties.get('--dnd-box-top')?.toString().trim()] ?? type1a;
     const bottom = types[properties.get('--dnd-box-bottom')?.toString().trim()] ?? top;
 
+    height *= 2;
+    width *= 2;
+
+    ctx.scale(.5, .5);
+
     fourCorners(top, bottom)(ctx, {height, width});
   }
 }
