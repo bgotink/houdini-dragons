@@ -1,40 +1,15 @@
-import {createStyleApplier} from './utils/style.mjs';
-import {createTemplate} from './utils/template.mjs';
-
-const template = createTemplate(`
-  <slot></slot>
-`);
-const applyStyles = createStyleApplier(`
-  :host {
-    display: block;
-
-    --dnd-box-border: black;
-    --dnd-box-color: lightgray;
-
-    background: var(--dnd-box-color);
-    border: 1px solid var(--dnd-box-border);
-    border-radius: 5px;
-  }
-
-  @supports (background: paint(id)) {
-    :host {
-      background: paint(dnd-box);
-      border: unset;
-      border-radius: unset;
-    }
-  }
-`, template);
+import {LitElement, html, css} from 'https://unpkg.com/lit-element?module';
+import {styleMap} from 'https://unpkg.com/lit-html/directives/style-map.js?module';
 
 if (isSecureContext && CSS.paintWorklet == null) {
   // Browser doesn't support paint worklet out of the box :(
 
-  import('https://unpkg.com/css-paint-polyfill').then(() => {
+  import('https://unpkg.com/css-paint-polyfill?module').then(() => {
     CSS.paintWorklet?.addModule('worklet.mjs');
   });
 } else {
   CSS.paintWorklet?.addModule('worklet.mjs');
 }
-
 
 CSS.registerProperty?.({
   name: '--dnd-box-border',
@@ -64,48 +39,94 @@ CSS.registerProperty?.({
   initialValue: 'auto',
 });
 
-class DndBox extends HTMLElement {
-  static get observedAttributes() {
-    return ['top', 'bottom'];
-  }
+class DndBox extends LitElement {
+  static properties = {
+    top: {type: String},
+    bottom: {type: String},
+    title: {type: String},
+  };
 
-  constructor() {
-    super();
+  static styles = css`
+    :host {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: stretch;
+      justify-content: stretch;
+    }
 
-    const root = this.attachShadow({mode: 'open'});
+    .box {
+      flex: 1 0 0px;
+      background: var(--dnd-box-color);
+      border: 1px solid var(--dnd-box-border);
+      border-radius: 5px;
+      padding: 15px 25px;
+    }
 
-    root.appendChild(template.content.cloneNode(true));
-    applyStyles(root);
-
-    for (const attribute of ['top', 'bottom']) {
-      if (this.hasAttribute(attribute)) {
-        this.setCssAttribute(attribute, this.getAttribute(attribute));
+    @supports (background: paint(id)) {
+      .box {
+        background: paint(dnd-box);
+        border: unset;
+        border-radius: unset;
       }
     }
-  }
 
-  setCssAttribute(name, value) {
-    this.style.setProperty(`--dnd-box-${name}`, value);
-  }
+    .box--with-title {
+      padding-bottom: 40px;
+      position: relative;
+    }
 
-  attributeChangedCallback(name, _oldValue, newValue) {
-    this.setCssAttribute(name, newValue);
-  }
+    .title {
+      bottom: 0;
+      font-size: 1em;
+      line-height: 40px;
+      height: 40px;
+      left: 0;
+      margin: 0;
+      position: absolute;
+      right: 0;
+      text-align: center;
+      text-transform: uppercase;
+    }
+  `;
 
-  get top() {
-    return this.getAttribute('top');
-  }
+  // FIXME property definitions don't work when used in conjunction with the static properties
+  // property.
+  //
+  // /** @type {string} */
+  // top;
+  // /** @type {string} */
+  // bottom;
+  // /** @type {string} */
+  // title;
 
-  set top(top) {
-    this.setAttribute('top', top);
-  }
+  render() {
+    const style = {};
 
-  get bottom() {
-    return this.getAttribute('bottom');
-  }
+    const {top, bottom} = this;
 
-  set bottom(bottom) {
-    this.setAttribute('bottom', bottom);
+    if (top) {
+      style['--dnd-box-top'] = top;
+    }
+
+    if (bottom) {
+      style['--dnd-box-bottom'] = bottom;
+    }
+
+    if (!this.title) {
+      return html`
+        <section class="box" style=${styleMap(style)}>
+          <slot></slot>
+        </section>
+      `;
+    }
+
+    return html`
+      <section class="box box--with-title" aria-labelledby="title" style=${styleMap(style)}>
+        <h2 class="title" id="title">${this.title}</h2>
+
+        <slot></slot>
+      </section>
+    `;
   }
 }
 

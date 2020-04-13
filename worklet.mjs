@@ -18,9 +18,7 @@ const types = {
 };
 
 class Painter {
-  static get inputProperties() {
-    return ['--dnd-box-border', '--dnd-box-color', '--dnd-box-top', '--dnd-box-bottom',];
-  }
+  static inputProperties = ['--dnd-box-border', '--dnd-box-color', '--dnd-box-top', '--dnd-box-bottom',];
 
   /**
    * @param {CanvasRenderingContext2D} ctx 
