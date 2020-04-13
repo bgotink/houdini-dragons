@@ -6,3 +6,20 @@ body {
   width: 399px;
   height: 580px;
 }
+
+.traits dnd-box {
+  --dnd-box-bottom: type1d;
+  --dnd-box-top: type1d;
+  
+  width: 400px;
+  height: 150px;
+  margin-top: 20px;
+}
+
+.traits dnd-box:last-child {
+  --dnd-box-bottom: type1a;
+}
+
+.traits dnd-box:first-child {
+  --dnd-box-top: type1a;
+}
