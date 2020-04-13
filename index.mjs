@@ -27,6 +27,34 @@ const applyStyles = createStyleApplier(`
 
 CSS.paintWorklet?.addModule('worklet.mjs');
 
+CSS.registerProperty?.({
+  name: '--dnd-box-border',
+  syntax: '<color>',
+  inherits: true,
+  initialValue: 'currentColor',
+});
+
+CSS.registerProperty?.({
+  name: '--dnd-box-color',
+  syntax: '<color>',
+  inherits: true,
+  initialValue: 'transparent',
+});
+
+CSS.registerProperty?.({
+  name: '--dnd-box-bottom',
+  syntax: 'auto | type1a | type1b | type1c | type1d',
+  inherits: true,
+  initialValue: 'auto',
+});
+
+CSS.registerProperty?.({
+  name: '--dnd-box-top',
+  syntax: 'auto | type1a | type1b | type1c | type1d',
+  inherits: true,
+  initialValue: 'auto',
+});
+
 class DndBox extends HTMLElement {
   static get observedAttributes() {
     return ['top', 'bottom'];
