@@ -216,4 +216,76 @@ export function type1c(ctx, geom) {
   ctx.stroke();
 }
 
-export default {type1a, type1b, type1c};
+/**
+ * Draws a top-left type 1d corner
+ * 
+ * @param {CanvasRenderingContext2D} ctx 
+ * @param {Geometry} geom
+ */
+export function type1d(ctx, geom) {
+  ctx.translate(2.5, 2.5);
+
+  const clip1 = new Path2D();
+  clip1.moveTo(27, geom.height / 2);
+  clip1.lineTo(27, 130);
+  clip1.arcTo(27, 110, 15, 40, 40);
+  clip1.lineTo(17, 40); // not 15 because then we see the end poking out
+  clip1.lineTo(geom.width / 2, 40);
+  clip1.lineTo(geom.width / 2, geom.height / 2);
+  clip1.closePath();
+
+  const clip2 = new Path2D();
+  clip2.moveTo(geom.width / 2, 0);
+  clip2.lineTo(80, 0);
+  clip2.arcTo(60, 12, 46.5, 12, 60);
+  clip2.lineTo(47.5, 12);
+  clip2.arcTo(31, 12, 30, 0, 16);
+  clip2.lineTo(30, 0);
+  clip2.lineTo(15, 0);
+  clip2.lineTo(15, 40);
+  clip2.lineTo(geom.width / 2, 40);
+  clip2.closePath();
+
+  ctx.save();
+  ctx.clip(clip1);
+  ctx.beginPath();
+  ctx.rect(0, 40, geom.width / 2, geom.height / 2 - 40);
+  ctx.fill();
+  ctx.restore();
+
+  ctx.save();
+  ctx.clip(clip2);
+  ctx.beginPath();
+  ctx.rect(15, 0, geom.width / 2 - 15, 40);
+  ctx.fill();
+  ctx.restore();
+
+  ctx.beginPath();
+  ctx.lineWidth = 5;
+  
+  ctx.moveTo(geom.width / 2, 0);
+  ctx.lineTo(80, 0);
+  ctx.arcTo(60, 12, 46.5, 12, 60);
+  ctx.lineTo(47.5, 12);
+  ctx.arcTo(31, 12, 30, 0, 16);
+  ctx.lineTo(30, 0);
+  ctx.lineTo(15, 0);
+  ctx.lineTo(15, geom.height / 2);
+
+  ctx.moveTo(47.5, 12);
+  ctx.ellipse(47.5, 12, 2.5, 2.5, 0, 0, 2 * Math.PI);
+  
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.lineWidth = 2;
+  
+  ctx.moveTo(27, geom.height / 2);
+  ctx.lineTo(27, 130);
+  ctx.arcTo(27, 110, 15, 40, 40);
+  ctx.lineTo(17, 40); // not 15 because then we see the end poking out
+  
+  ctx.stroke();
+}
+
+export default {type1a, type1b, type1c, type1d};
