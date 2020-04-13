@@ -25,7 +25,16 @@ const applyStyles = createStyleApplier(`
   }
 `, template);
 
-CSS.paintWorklet?.addModule('worklet.mjs');
+if (isSecureContext && CSS.paintWorklet == null) {
+  // Browser doesn't support paint worklet out of the box :(
+
+  import('https://unpkg.com/css-paint-polyfill').then(() => {
+    CSS.paintWorklet?.addModule('worklet.mjs');
+  });
+} else {
+  CSS.paintWorklet?.addModule('worklet.mjs');
+}
+
 
 CSS.registerProperty?.({
   name: '--dnd-box-border',
